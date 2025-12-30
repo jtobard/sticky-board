@@ -42,6 +42,7 @@ const Board = ({
 
     return (
         <div
+            id="board-container"
             ref={containerRef}
             className="w-full h-full overflow-hidden relative cursor-grab active:cursor-grabbing"
             onMouseDown={handleMouseDown}
@@ -57,6 +58,7 @@ const Board = ({
         >
             {/* Render Content */}
             <div
+                id="board-grid"
                 className="board-grid absolute origin-top-left shadow-lg transition-transform will-change-transform"
                 style={{
                     transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
@@ -78,7 +80,7 @@ const Board = ({
             </div>
 
             {/* Helper overlay moved to App or kept here? Kept here for simplicity but controlled by props */}
-            <div className="absolute bottom-4 right-4 glass-panel px-3 py-1 text-sm font-mono pointer-events-none">
+            <div id="zoom-indicator" className="absolute bottom-4 right-4 glass-panel px-3 py-1 text-sm font-mono pointer-events-none">
                 {Math.round(scale * 100)}%
             </div>
         </div>

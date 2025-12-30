@@ -90,6 +90,7 @@ const PostIt = ({ id, x, y, width = 160, height = 160, content, color, updatePos
 
     return (
         <div
+            id={`postit-${id}`}
             style={{
                 transform: `translate(${x}px, ${y}px) ${isDragging ? 'rotate(-2deg) scale(1.05)' : ''}`,
                 width: width,
@@ -103,13 +104,17 @@ const PostIt = ({ id, x, y, width = 160, height = 160, content, color, updatePos
                 zIndex: isDragging || isResizing ? 1000 : 500,
                 pointerEvents: 'auto'
             }}
-            className={`post-it-card flex flex-col p-2 group`}
+            className={`post-it-card flex flex-col p-2 group relative`}
             onMouseDown={handleMouseDown}
-            onDoubleClick={() => setIsEditing(true)}
+            onDoubleClick={(e) => {
+                e.stopPropagation();
+                setIsEditing(true);
+            }}
         >
-            <div className="flex-1 w-full h-full relative" style={{ padding: PADDING }}>
+            <div id={`postit-content-${id}`} className="flex-1 w-full h-full relative" style={{ padding: PADDING }}>
                 {isEditing ? (
                     <textarea
+                        id={`postit-textarea-${id}`}
                         autoFocus
                         className="w-full h-full bg-transparent resize-none outline-none border-none font-sans"
                         style={{ fontSize: getFontSize(content), color: 'black' }}
@@ -120,6 +125,7 @@ const PostIt = ({ id, x, y, width = 160, height = 160, content, color, updatePos
                     />
                 ) : (
                     <div
+                        id={`postit-text-${id}`}
                         className="w-full h-full overflow-hidden break-words whitespace-pre-wrap select-none cursor-move"
                         style={{ fontSize: getFontSize(content), color: 'black' }}
                     >
@@ -130,6 +136,7 @@ const PostIt = ({ id, x, y, width = 160, height = 160, content, color, updatePos
                 {/* Delete Button */}
                 {!isDragging && !isResizing && (
                     <button
+                        id={`postit-delete-${id}`}
                         className="absolute top-[-10px] right-[-10px] w-7 h-7 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center text-xs shadow-lg hover:scale-110 transition-all duration-200"
                         onClick={(e) => {
                             e.stopPropagation();
@@ -143,6 +150,7 @@ const PostIt = ({ id, x, y, width = 160, height = 160, content, color, updatePos
 
             {/* Resize Handle */}
             <div
+                id={`postit-resize-${id}`}
                 className="absolute bottom-0 right-0 w-6 h-6 cursor-se-resize flex items-end justify-end p-1 opacity-0 group-hover:opacity-100"
                 onMouseDown={handleResizeStart}
             >

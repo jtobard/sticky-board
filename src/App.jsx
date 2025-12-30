@@ -151,10 +151,10 @@ function App() {
   const toggleConfig = () => setShowConfig(!showConfig);
 
   return (
-    <div className="app-container relative w-full h-full overflow-hidden">
+    <div id="app-container" className="app-container relative w-full h-full overflow-hidden">
       {/* Tools UI */}
-      <div className="absolute top-6 left-6 z-50 flex flex-col gap-3 pointer-events-none w-min">
-        <div className="glass-panel p-2 flex gap-1.5 pointer-events-auto items-center w-max">
+      <div id="toolbar-wrapper" className="absolute top-4 left-4 z-50 flex flex-col gap-3 pointer-events-none">
+        <div id="toolbar-main-panel" className="glass-panel p-2 flex gap-1.5 pointer-events-auto items-center">
           {/* Menu / Config */}
           <button onClick={toggleConfig} className="icon-btn" title="Menu">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -164,9 +164,10 @@ function App() {
             </svg>
           </button>
 
-          <div className="w-px bg-gray-300 h-6"></div>
+          <div id="divider-1" className="w-px bg-gray-300 h-6"></div>
 
           <button
+            id="btn-new-postit"
             onClick={addPostIt}
             className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 font-semibold shadow-md hover:shadow-lg flex items-center gap-1.5 text-sm transition-all duration-200 hover:scale-105 whitespace-nowrap"
           >
@@ -177,10 +178,11 @@ function App() {
             New
           </button>
 
-          <div className="w-px bg-gray-300 h-6"></div>
+          <div id="divider-2" className="w-px bg-gray-300 h-6"></div>
 
           {/* Tools */}
           <button
+            id="btn-tool-select"
             className={`icon-btn ${activeTool === 'select' ? 'active' : ''}`}
             onClick={() => setActiveTool('select')}
             title="Select / Move"
@@ -190,6 +192,7 @@ function App() {
             </svg>
           </button>
           <button
+            id="btn-tool-pen"
             className={`icon-btn ${activeTool === 'pen' ? 'active' : ''}`}
             onClick={() => setActiveTool('pen')}
             title="Draw"
@@ -202,6 +205,7 @@ function App() {
             </svg>
           </button>
           <button
+            id="btn-tool-eraser"
             className={`icon-btn ${activeTool === 'eraser' ? 'active' : ''}`}
             onClick={() => setActiveTool('eraser')}
             title="Erase"
@@ -215,7 +219,7 @@ function App() {
 
         {/* Color Picker (Only if Pen) */}
         {activeTool === 'pen' && (
-          <div className="glass-panel p-2 flex gap-1.5 pointer-events-auto animate-in fade-in slide-in-from-left-4 duration-200 w-max">
+          <div id="color-picker-panel" className="glass-panel p-2 flex gap-1.5 pointer-events-auto animate-in fade-in slide-in-from-left-4 duration-200">
             {['#000000', '#ef4444', '#3b82f6', '#10b981', '#f59e0b'].map(c => (
               <button
                 key={c}
@@ -231,8 +235,8 @@ function App() {
 
       {/* Config Menu Modal */}
       {showConfig && (
-        <div className="absolute top-20 left-6 z-50 glass-panel p-4 flex flex-col gap-4 w-64 animate-in zoom-in-95 duration-100 pointer-events-auto">
-          <div className="flex items-center justify-between">
+        <div id="config-menu-modal" className="absolute top-20 left-6 z-50 glass-panel p-4 flex flex-col gap-4 w-64 animate-in zoom-in-95 duration-100 pointer-events-auto">
+          <div id="config-header" className="flex items-center justify-between">
             <h3 className="font-bold text-lg text-gray-800">Settings</h3>
             <button onClick={toggleConfig} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

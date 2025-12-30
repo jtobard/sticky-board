@@ -93,6 +93,7 @@ const DrawingLayer = forwardRef(({ width, height, tool, color, zoom, active }, r
 
     return (
         <canvas
+            id="drawing-canvas"
             ref={canvasRef}
             width={pixelWidth}
             height={pixelHeight}

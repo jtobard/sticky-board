@@ -95,3 +95,19 @@ button {
   display: flex;
   overflow: hidden;
 }
+
+.app-container {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#toolbar-wrapper {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: auto;
+  height: auto;
+  z-index: 1000;
+}
