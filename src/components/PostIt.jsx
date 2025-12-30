@@ -4,7 +4,6 @@ const PostIt = ({ id, x, y, width = 160, height = 160, content, color, updatePos
     const [isDragging, setIsDragging] = useState(false);
     const [isResizing, setIsResizing] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
     const offset = useRef({ x: 0, y: 0 });
     const resizeStart = useRef({ w: 0, h: 0, x: 0, y: 0 });
 
@@ -105,16 +104,14 @@ const PostIt = ({ id, x, y, width = 160, height = 160, content, color, updatePos
                 zIndex: isDragging || isResizing ? 1000 : 500,
                 pointerEvents: 'auto'
             }}
-            className={`post-it-card flex flex-col group relative`}
+            className={`post-it-card group relative`}
             onMouseDown={handleMouseDown}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
             onDoubleClick={(e) => {
                 e.stopPropagation();
                 setIsEditing(true);
             }}
         >
-            <div id={`postit-content-${id}`} className="w-full h-full relative" style={{ padding: PADDING }}>
+            <div id={`postit-content-${id}`} className="w-full h-full relative" style={{ padding: PADDING, boxSizing: 'border-box' }}>
                 {isEditing ? (
                     <textarea
                         id={`postit-textarea-${id}`}
@@ -129,8 +126,17 @@ const PostIt = ({ id, x, y, width = 160, height = 160, content, color, updatePos
                 ) : (
                     <div
                         id={`postit-text-${id}`}
-                        className="w-full h-full overflow-hidden break-words whitespace-pre-wrap select-none cursor-move"
-                        style={{ fontSize: getFontSize(content), color: 'black' }}
+                        className="w-full h-full overflow-hidden break-words select-none cursor-move"
+                        style={{ 
+                            fontSize: getFontSize(content), 
+                            color: 'black',
+                            display: '-webkit-box',
+                            WebkitBoxOrient: 'vertical',
+                            WebkitLineClamp: 'unset',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-word'
+                        }}
                     >
                         {content || <span className="opacity-30 italic">Empty...</span>}
                     </div>
@@ -138,11 +144,11 @@ const PostIt = ({ id, x, y, width = 160, height = 160, content, color, updatePos
             </div>
 
             {/* Delete Button */}
-            {!isDragging && !isResizing && isHovered && (
+            {!isDragging && !isResizing && (
                 <button
                     id={`postit-delete-${id}`}
-                    className="absolute top-[-10px] right-[-10px] w-7 h-7 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-full flex items-center justify-center text-xs shadow-lg hover:scale-110 transition-all duration-200 z-10"
-                    style={{ pointerEvents: 'auto' }}
+                    className="absolute w-7 h-7 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-full flex items-center justify-center text-xs shadow-lg hover:scale-110 transition-all duration-200"
+                    style={{ pointerEvents: 'auto', position: 'absolute', top: 0, right: 0, zIndex: 100 }}
                     onMouseDown={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
@@ -160,15 +166,16 @@ const PostIt = ({ id, x, y, width = 160, height = 160, content, color, updatePos
             {/* Resize Handle */}
             <div
                 id={`postit-resize-${id}`}
-                className="absolute bottom-0 right-0 w-6 h-6 cursor-se-resize flex items-end justify-end opacity-0 group-hover:opacity-100"
-                onMouseDown={handleResizeStart}
-            >
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-50">
-                    <path d="M10 8L10 10L8 10L10 8Z" fill="black" />
-                    <path d="M10 4L10 6L4 10L6 10L10 4Z" fill="black" />
-                    <path d="M10 0L10 2L0 10L2 10L10 0Z" fill="black" />
-                </svg>
-            </div>
+                className="w-4 h-4 cursor-se-resize z-10"
+                style={{ pointerEvents: 'auto', position: 'absolute', bottom: 0, right: 0 }}
+                    onMouseDown={handleResizeStart}
+                >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 14L16 16L14 16L16 14Z" fill="currentColor" fillOpacity="0.5" />
+                        <path d="M16 9L16 11L9 16L11 16L16 9Z" fill="currentColor" fillOpacity="0.5" />
+                        <path d="M16 4L16 6L4 16L6 16L16 4Z" fill="currentColor" fillOpacity="0.5" />
+                    </svg>
+                </div>
         </div>
     );
 };
