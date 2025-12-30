@@ -18,7 +18,7 @@ Post-It Playground is an interactive web application that allows users to create
 1. Clone the repository:
    ```bash
    git clone <repository-url>
-   cd PostItPlayground
+   cd sticky-board
    ```
 
 2. Install dependencies:
