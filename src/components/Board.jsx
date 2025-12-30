@@ -7,7 +7,8 @@ const Board = ({
     scale = 1,
     position = { x: 0, y: 0 },
     onPan,
-    onDoubleClick
+    onDoubleClick,
+    activeTool = 'select'
 }) => {
     const isDragging = useRef(false);
     const lastMousePos = useRef({ x: 0, y: 0 });
@@ -15,7 +16,8 @@ const Board = ({
     const GRID_SIZE = 160;
 
     const handleMouseDown = (e) => {
-        if (e.target === e.currentTarget || e.target.classList.contains('board-grid')) {
+        // Solo permitir panning si activeTool es 'select' y el click es en el board/grid
+        if (activeTool === 'select' && (e.target === e.currentTarget || e.target.classList.contains('board-grid'))) {
             isDragging.current = true;
             lastMousePos.current = { x: e.clientX, y: e.clientY };
         }
@@ -44,17 +46,18 @@ const Board = ({
         <div
             id="board-container"
             ref={containerRef}
-            className="w-full h-full overflow-hidden relative cursor-grab active:cursor-grabbing"
+            className="w-full h-full overflow-hidden relative"
+            style={{
+                cursor: activeTool === 'select' ? (isDragging.current ? 'grabbing' : 'grab') : 'default',
+                backgroundColor: 'var(--bg-color)',
+                touchAction: 'none',
+                zIndex: 1
+            }}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
             onDoubleClick={handleDoubleClick}
-            style={{
-                backgroundColor: 'var(--bg-color)',
-                touchAction: 'none',
-                zIndex: 1
-            }}
         >
             {/* Render Content */}
             <div
@@ -71,8 +74,7 @@ const Board = ({
                     linear-gradient(var(--grid-color) 1px, transparent 1px),
                     linear-gradient(90deg, var(--grid-color) 1px, transparent 1px)
                 `,
-                    backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`,
-                    zIndex: -1
+                    backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`
                 }}
             >
                 {children}

@@ -97,14 +97,15 @@ const DrawingLayer = forwardRef(({ width, height, tool, color, zoom, active }, r
             ref={canvasRef}
             width={pixelWidth}
             height={pixelHeight}
-            className={`absolute top-0 left-0 ${tool === 'select' ? 'pointer-events-none' : 'cursor-crosshair'}`}
+            className={`absolute top-0 left-0 ${tool === 'select' ? '' : 'cursor-crosshair'}`}
             onMouseDown={startDrawing}
             onMouseMove={draw}
             onMouseUp={stopDrawing}
             onMouseLeave={stopDrawing}
             style={{
                 position: 'absolute',
-                zIndex: 1
+                zIndex: 1,
+                pointerEvents: tool === 'select' ? 'none' : 'auto'
             }}
         />
     );

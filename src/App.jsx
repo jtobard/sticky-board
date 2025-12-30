@@ -5,8 +5,8 @@ import DrawingLayer from './components/DrawingLayer';
 
 function App() {
   const [boardConfig, setBoardConfig] = useState({
-    width: 20,
-    height: 20
+    width: 5,
+    height: 5
   });
 
   // Board State
@@ -308,6 +308,7 @@ function App() {
         position={pan}
         onPan={setPan}
         onDoubleClick={addPostItAt}
+        activeTool={activeTool}
       >
         <DrawingLayer
           ref={drawingLayerRef}
