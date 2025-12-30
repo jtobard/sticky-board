@@ -4,6 +4,7 @@ const PostIt = ({ id, x, y, width = 160, height = 160, content, color, updatePos
     const [isDragging, setIsDragging] = useState(false);
     const [isResizing, setIsResizing] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
     const offset = useRef({ x: 0, y: 0 });
     const resizeStart = useRef({ w: 0, h: 0, x: 0, y: 0 });
 
@@ -104,14 +105,16 @@ const PostIt = ({ id, x, y, width = 160, height = 160, content, color, updatePos
                 zIndex: isDragging || isResizing ? 1000 : 500,
                 pointerEvents: 'auto'
             }}
-            className={`post-it-card flex flex-col p-2 group relative`}
+            className={`post-it-card flex flex-col group relative`}
             onMouseDown={handleMouseDown}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             onDoubleClick={(e) => {
                 e.stopPropagation();
                 setIsEditing(true);
             }}
         >
-            <div id={`postit-content-${id}`} className="flex-1 w-full h-full relative" style={{ padding: PADDING }}>
+            <div id={`postit-content-${id}`} className="w-full h-full relative" style={{ padding: PADDING }}>
                 {isEditing ? (
                     <textarea
                         id={`postit-textarea-${id}`}
@@ -132,26 +135,32 @@ const PostIt = ({ id, x, y, width = 160, height = 160, content, color, updatePos
                         {content || <span className="opacity-30 italic">Empty...</span>}
                     </div>
                 )}
-
-                {/* Delete Button */}
-                {!isDragging && !isResizing && (
-                    <button
-                        id={`postit-delete-${id}`}
-                        className="absolute top-[-10px] right-[-10px] w-7 h-7 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center text-xs shadow-lg hover:scale-110 transition-all duration-200"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            updatePostIt(id, null, false, true);
-                        }}
-                    >
-                        ✕
-                    </button>
-                )}
             </div>
+
+            {/* Delete Button */}
+            {!isDragging && !isResizing && isHovered && (
+                <button
+                    id={`postit-delete-${id}`}
+                    className="absolute top-[-10px] right-[-10px] w-7 h-7 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-full flex items-center justify-center text-xs shadow-lg hover:scale-110 transition-all duration-200 z-10"
+                    style={{ pointerEvents: 'auto' }}
+                    onMouseDown={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        updatePostIt(id, null, false, true);
+                    }}
+                >
+                    ✕
+                </button>
+            )}
 
             {/* Resize Handle */}
             <div
                 id={`postit-resize-${id}`}
-                className="absolute bottom-0 right-0 w-6 h-6 cursor-se-resize flex items-end justify-end p-1 opacity-0 group-hover:opacity-100"
+                className="absolute bottom-0 right-0 w-6 h-6 cursor-se-resize flex items-end justify-end opacity-0 group-hover:opacity-100"
                 onMouseDown={handleResizeStart}
             >
                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-50">
